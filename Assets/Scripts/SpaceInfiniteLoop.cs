@@ -18,9 +18,10 @@ public class SpaceInfiniteLoop : MonoBehaviour
 	}
 	IEnumerator MyInfiniteLoop()
 	{
+		int count = 1;
 		while (true)
 		{
-			Debug.Log("This will print forever until you press the space key.");
+			Debug.Log(count++);
 			yield return new WaitForSeconds(0.5f);
 		}
 	}
