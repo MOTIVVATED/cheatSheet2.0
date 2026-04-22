@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Respawn : MonoBehaviour
 {
-	IEnumerator RespawnPlayer(Action<string> onComplete)
+	IEnumerator RespawnPlayer(Action onComplete)
 	{
 		Debug.Log("Player died.");
 		
@@ -12,10 +12,10 @@ public class Respawn : MonoBehaviour
 		
 		Debug.Log("Respawning...");
 		
-		onComplete("Player is back in the game!");
+		onComplete();
 	}
 	void Start()
 	{
-		StartCoroutine(RespawnPlayer(message => Debug.Log(message)));
+		StartCoroutine(RespawnPlayer(() => Debug.Log("Player is back in the game!")));
 	}
 }
