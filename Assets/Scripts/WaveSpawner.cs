@@ -14,7 +14,15 @@ public class WaveSpawner : MonoBehaviour
 	}
 	IEnumerator SpawnWave(int waveNumber, int enemyCount, float timeBetweenEnemies)
 	{
-		yield return new WaitForSeconds(timeBetweenEnemies);
+		Debug.Log("Wave " + waveNumber + " starting!");
+
+		for (int i = 0; i < enemyCount; i++)
+		{
+			Debug.Log("Spawning enemy " + (i + 1));
+			yield return new WaitForSeconds(timeBetweenEnemies);
+		}
+
+		Debug.Log("Wave " + waveNumber + " completed!");
 	}
 	IEnumerator RunWaves()
 	{
