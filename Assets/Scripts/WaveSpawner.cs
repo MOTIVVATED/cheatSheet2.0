@@ -1,32 +1,52 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class WaveSpawner : MonoBehaviour
 {
-	[SerializeField] private int waveNumber = 3;
-	[SerializeField] private int enemyCount = 3;
-	[SerializeField] private float timeBetweenEnemies = 0.5f;
-	[SerializeField] private float timeBetweenWaves = 5f;
+	private class Wave
+	{
+		public int waveNumber;
+		public int enemyCount;
+		public float timeBetweenEnemies;
+		public Wave(int waveNumber, int enemyCount, float timeBetweenEnemies)
+		{
+			this.waveNumber = waveNumber;
+			this.enemyCount = enemyCount;
+			this.timeBetweenEnemies = timeBetweenEnemies;
+		}
+	}
+
+	private static Wave Wave1 = new Wave(1, 3, 1f);
+	private static Wave Wave2 = new Wave(2, 5, 0.75f);
+	private static Wave Wave3 = new Wave(3, 8, 0.5f);
+
+	private static Wave[] waves = { Wave1, Wave2, Wave3 };
 
 	private void Start()
 	{
-		StartCoroutine(RunWaves());
+		StartCoroutine(RunWaves(waves));
 	}
-	IEnumerator SpawnWave(int waveNumber, int enemyCount, float timeBetweenEnemies)
+	IEnumerator SpawnWave(Wave wave, Action OnComplete)
 	{
-		Debug.Log("Wave " + waveNumber + " starting!");
+			Debug.Log("Wave " + wave.waveNumber + " starting!");
 
-		for (int i = 0; i < enemyCount; i++)
+			for (int i = 0; i < wave.enemyCount; i++)
+			{
+				Debug.Log("Spawning enemy " + (i + 1));
+				yield return new WaitForSeconds(wave.timeBetweenEnemies);
+			}
+
+			OnComplete?.Invoke();
+	}
+
+	IEnumerator RunWaves(Wave[] waves)
+	{
+		for (int i = 0; i < waves.Length; i++)
 		{
-			Debug.Log("Spawning enemy " + (i + 1));
-			yield return new WaitForSeconds(timeBetweenEnemies);
-		}
+			yield return StartCoroutine(SpawnWave(waves[i], () => Debug.Log("Wave " + waves[i].waveNumber + " completed!")));
 
-		Debug.Log("Wave " + waveNumber + " completed!");
-	}
-	IEnumerator RunWaves()
-	{
-		SpawnWave(waveNumber, enemyCount, timeBetweenEnemies);
-		yield return new WaitForSeconds(timeBetweenWaves);
+			yield return new WaitForSeconds(5f);
+		}
 	}
 }
