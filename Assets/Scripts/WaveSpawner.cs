@@ -44,7 +44,9 @@ public class WaveSpawner : MonoBehaviour
 	{
 		for (int i = 0; i < waves.Length; i++)
 		{
-			yield return StartCoroutine(SpawnWave(waves[i], () => Debug.Log("Wave " + waves[i].waveNumber + " completed!")));
+			int capturedNumber = waves[i].waveNumber; // Capture the wave number for the closure
+
+			yield return StartCoroutine(SpawnWave(waves[i], () => Debug.Log("Wave " + capturedNumber + " completed!")));
 
 			yield return new WaitForSeconds(5f);
 		}
