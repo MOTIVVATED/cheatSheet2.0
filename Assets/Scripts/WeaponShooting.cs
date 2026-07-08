@@ -4,7 +4,18 @@ using UnityEngine;
 
 public class WeaponShooting : MonoBehaviour
 {
-	abstract class Weapon
+	interface IHasInfo
+	{
+		void ShowInfo();
+	}	
+
+	interface IWeapon
+	{
+		int Damage { get; }
+		void Fire();
+	}
+
+	abstract class Weapon : IHasInfo, IWeapon
 	{
 		public abstract int Damage { get; }
 		
@@ -43,6 +54,14 @@ public class WeaponShooting : MonoBehaviour
 		public override int Damage => 8;
 	}
 
+	class Box : IHasInfo
+	{
+		public void ShowInfo()
+		{
+			Debug.Log("This is a box.");
+		}
+	}
+
 	class Player
 	{
 		public void FireWeapon(Weapon weapon)
@@ -50,9 +69,9 @@ public class WeaponShooting : MonoBehaviour
 			weapon.Fire();
 		}
 
-		public void ShowWeaponTifo(Weapon weapon)
+		public void CheckInfo(IHasInfo hasInfo)
 		{
-			weapon.ShowInfo();
+			hasInfo.ShowInfo();
 		}
 	}
 
@@ -64,8 +83,9 @@ public class WeaponShooting : MonoBehaviour
 
 		foreach (var item in inventory)
 		{
-			player.ShowWeaponTifo(item);
+			player.CheckInfo(item);
 			player.FireWeapon(item);
 		}
+		player.CheckInfo(new Box());
 	}
 }
