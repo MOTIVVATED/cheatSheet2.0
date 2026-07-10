@@ -1,8 +1,10 @@
-using UnityEngine;
 using System;
+using UnityEngine;
 
-public class Delegate : MonoBehaviour
+public class MyOwnDelegate : MonoBehaviour
 {
+	delegate int MathOperation(int a, int b);
+
 	static int Multiply(int a, int b)
 	{
 		return a * b;
@@ -15,12 +17,12 @@ public class Delegate : MonoBehaviour
 
 	private void Start()
 	{
-		Func<int, int, int> mathOperation = Multiply;
-		
-		ExecuteMathOperation(Multiply, 5, 10);
+		MathOperation mathOperation = Multiply;
+
+		ExecuteMathOperation(mathOperation, 5, 10);
 	}
 
-	static void ExecuteMathOperation(Func<int, int, int> mathOperation, int a, int b)
+	static void ExecuteMathOperation(MathOperation mathOperation, int a, int b)
 	{
 		Debug.Log("Very important code");
 
